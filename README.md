@@ -88,6 +88,9 @@ When you see `HISTORY SYNC COMPLETE` and `SAFE TO EXIT`, press **Ctrl+C**.
 
 ## ⚙️ Claude Desktop Configuration
 
+> ⚠️ **Not compatible with Claude Desktop Cowork / Scheduled Tasks.**
+> When Cowork or Scheduled Tasks features are enabled, Claude Desktop spawns **multiple MCP server instances** for background agents. WhatsApp only allows one active linked-device connection at a time, so the duplicate instances fight for the session and cause a `status=440, reconnect=true` loop. Disable both in your config (see step 2 below) or this integration will not work reliably.
+
 ### 1. Locate your Claude Desktop config file
 
 | OS | Path |
@@ -116,7 +119,7 @@ Open the file and merge this into the `mcpServers` section (create the key if it
 - Get node path: `which node` (macOS/Linux) or `where node` (Windows)
 - Use absolute paths — Claude Desktop doesn't resolve shell PATH reliably
 
-Example (macOS, Homebrew node):
+Example (macOS, Homebrew node) with Cowork/Scheduled Tasks disabled:
 ```json
 {
   "mcpServers": {
@@ -126,9 +129,15 @@ Example (macOS, Homebrew node):
         "/Users/yourname/projects/mcp-whatsapp/mcp-server.js"
       ]
     }
+  },
+  "preferences": {
+    "coworkScheduledTasksEnabled": false,
+    "ccdScheduledTasksEnabled": false
   }
 }
 ```
+
+If you already have a `"preferences"` block in your config, just add the two `*ScheduledTasksEnabled` keys into it — don't duplicate the block.
 
 ### 3. Restart Claude Desktop
 **Fully quit** with Cmd+Q (not just close window), then reopen.
@@ -293,12 +302,14 @@ Group chats are supported — listed and readable like any other chat. JIDs end 
 
 ## 🛠 Known Limitations
 
-- Media (images, videos, audio) not downloaded — only text + metadata
-- Reactions tracked as separate messages, not linked to parent
-- Deleted messages not captured
-- History sync amount depends on WhatsApp — typically last 6 months
-- macOS/Linux tested; Windows paths need adjustment in config
-- Not designed for multi-account / multi-tenant use
+- **Not compatible with Claude Desktop Cowork / Scheduled Tasks** — these features spawn duplicate MCP instances which break the single-session WhatsApp connection. Must be disabled (see [Claude Desktop Configuration](#-claude-desktop-configuration)).
+- Runs only while Claude Desktop is open — for 24/7 capture you'd need a separate daemon (not included).
+- Media (images, videos, audio) not downloaded — only text + metadata.
+- Reactions tracked as separate messages, not linked to parent.
+- Deleted messages not captured.
+- History sync amount depends on WhatsApp — typically last 6 months.
+- macOS/Linux tested; Windows paths need adjustment in config.
+- Not designed for multi-account / multi-tenant use.
 
 ---
 
