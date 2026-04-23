@@ -1,4 +1,4 @@
-# mcp-whatsapp
+# MCP Whatsapp for Claude Desktop
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that gives **Claude Desktop** read-only access to your WhatsApp chats and message history.
 
