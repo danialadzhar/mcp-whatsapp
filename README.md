@@ -56,6 +56,9 @@ npm install
 
 ## 🔐 First-time Setup (Pair WhatsApp + History Sync)
 
+> ⚠️ **Important — do this BEFORE configuring Claude Desktop.**
+> The QR code can only be displayed in the terminal via `setup.js`. The MCP server (launched by Claude Desktop) cannot show the QR because its stdout is reserved for the MCP protocol. If you skip this step and go straight to Claude Desktop config, your bot will be stuck at `connecting` forever with no way to pair.
+
 ### 1. Run the setup script
 ```bash
 node setup.js
